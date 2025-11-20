@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useState } from 'react'
+import { Link } from 'vtex.render-runtime'
 import { IconCart } from 'vtex.store-icons'
 import { BackdropMode } from 'vtex.store-drawer'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
@@ -79,24 +80,29 @@ export const Minicart: FC<MinicartProps> = ({
   )
 
   if (variation === 'link') {
+    const content = <MinicartCssHandlesProvider
+      handles={handles}
+      withModifiers={withModifiers}
+    >
+      <MinicartIconButton
+        variation={variation}
+        Icon={MinicartIcon}
+        itemCountMode={itemCountMode}
+        quantityDisplay={quantityDisplay}
+      />
+    </MinicartCssHandlesProvider>
+
+    const isSpaLink = linkVariationUrl && linkVariationUrl.toLower().startsWith('http')
+
     return (
       <aside
         className={`${handles.minicartWrapperContainer} relative fr flex items-center`}
       >
         <div className={`${handles.minicartContainer} flex flex-column`}>
-          <a href={linkVariationUrl ?? checkoutUrl}>
-            <MinicartCssHandlesProvider
-              handles={handles}
-              withModifiers={withModifiers}
-            >
-              <MinicartIconButton
-                variation={variation}
-                Icon={MinicartIcon}
-                itemCountMode={itemCountMode}
-                quantityDisplay={quantityDisplay}
-              />
-            </MinicartCssHandlesProvider>
-          </a>
+          { isSpaLink 
+            ? <Link to={linkVariationUrl}>{content}</Link> 
+            : <a href={linkVariationUrl ?? checkoutUrl}>{content}</a>
+          }
         </div>
       </aside>
     )
