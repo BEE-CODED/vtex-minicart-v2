@@ -92,7 +92,7 @@ export const Minicart: FC<MinicartProps> = ({
       />
     </MinicartCssHandlesProvider>
 
-    const isSpaLink = linkVariationUrl && linkVariationUrl.toLower().startsWith('http')
+    const isSpaLink = linkVariationUrl && !linkVariationUrl.toLowerCase().startsWith('http')
 
     return (
       <aside
